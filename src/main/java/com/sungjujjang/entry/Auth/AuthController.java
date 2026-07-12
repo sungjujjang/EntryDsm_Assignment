@@ -54,7 +54,7 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getPhone(), request.getPassword())
         );
 
-        String token = jwtTokenProvider.createToken(authentication.getName());
+        String token = jwtTokenProvider.createToken(request.getPhone());
         return ResponseEntity.ok(new LoginResponse(token));
     }
 }

@@ -2,20 +2,16 @@ package com.sungjujjang.entry.Global;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
@@ -56,11 +52,10 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = parseClaims(token);
-
         String phone = claims.getSubject();
-
         CustomUserDetail principal = new CustomUserDetail(phone);
-        return new UsernamePasswordAuthenticationToken(principal, token);
+
+        return new JwtAuthentication(principal, token);
     }
 
     private Claims parseClaims(String token) {
@@ -69,6 +64,51 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
+        }
+    }
+
+    public static class JwtAuthentication implements Authentication {
+
+        private final CustomUserDetail principal;
+        private final String token;
+
+        public JwtAuthentication(CustomUserDetail principal, String token) {
+            this.principal = principal;
+            this.token = token;
+        }
+
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public Object getCredentials() {
+            return token;
+        }
+
+        @Override
+        public Object getDetails() {
+            return null;
+        }
+
+        @Override
+        public Object getPrincipal() {
+            return principal;
+        }
+
+        @Override
+        public boolean isAuthenticated() {
+            return true;
+        }
+
+        @Override
+        public void setAuthenticated(boolean isAuthenticated) {
+        }
+
+        @Override
+        public String getName() {
+            return principal.getPhone();
         }
     }
 }
