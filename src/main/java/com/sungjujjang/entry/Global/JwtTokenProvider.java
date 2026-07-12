@@ -66,49 +66,4 @@ public class JwtTokenProvider {
             return e.getClaims();
         }
     }
-
-    public static class JwtAuthentication implements Authentication {
-
-        private final CustomUserDetail principal;
-        private final String token;
-
-        public JwtAuthentication(CustomUserDetail principal, String token) {
-            this.principal = principal;
-            this.token = token;
-        }
-
-        @Override
-        public Collection<? extends GrantedAuthority> getAuthorities() {
-            return Collections.emptyList();
-        }
-
-        @Override
-        public Object getCredentials() {
-            return token;
-        }
-
-        @Override
-        public Object getDetails() {
-            return null;
-        }
-
-        @Override
-        public Object getPrincipal() {
-            return principal;
-        }
-
-        @Override
-        public boolean isAuthenticated() {
-            return true;
-        }
-
-        @Override
-        public void setAuthenticated(boolean isAuthenticated) {
-        }
-
-        @Override
-        public String getName() {
-            return principal.getPhone();
-        }
-    }
 }
