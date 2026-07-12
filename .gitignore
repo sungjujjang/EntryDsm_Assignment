@@ -1,9 +1,13 @@
+### Spring Boot ###
+/src/main/resources/application.properties
+
 HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+docs/**
 
 ### STS ###
 .apt_generated
@@ -35,6 +39,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-### Spring Boot ###
-/src/main/resources/application.properties
