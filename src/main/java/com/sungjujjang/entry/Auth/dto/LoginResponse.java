@@ -3,9 +3,6 @@ package com.sungjujjang.entry.Auth.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Getter
-@AllArgsConstructor
-public class LoginResponse {
-
-    private String accessToken;
-}
+public record LoginResponse (
+        String accessToken
+) {}

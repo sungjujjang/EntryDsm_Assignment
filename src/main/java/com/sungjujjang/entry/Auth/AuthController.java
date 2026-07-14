@@ -3,6 +3,7 @@ package com.sungjujjang.entry.Auth;
 import com.sungjujjang.entry.Auth.dto.LoginRequest;
 import com.sungjujjang.entry.Auth.dto.LoginResponse;
 import com.sungjujjang.entry.Auth.dto.RegisterRequest;
+import com.sungjujjang.entry.Auth.dto.RegisterResponse;
 import com.sungjujjang.entry.Global.JwtTokenProvider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,37 +25,21 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
+    private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> register(@Valid @RequestBody RegisterRequest request) {
-        if (userRepository.findByPhone(request.getPhone()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("error", "이미 존재하는 전화번호입니다"));
-        }
-
-        User user = User.builder()
-                .phone(request.getPhone())
-                .name(request.getName())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
-
-        userRepository.save(user);
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("message", "회원가입 성공"));
+    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(authService.register(request));
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getPhone(), request.getPassword())
-        );
-
-        String token = jwtTokenProvider.createToken(request.getPhone());
-        return ResponseEntity.ok(new LoginResponse(token));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(authService.login(request));
     }
 }
