@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum ErrorCode {
     APPLICATION_NOT_FOUND_ERR(404, "지원서를 찾을 수 없습니다."),
     USER_NOT_FOUND_ERR(404, "유저를 찾을 수 없습니다."),
+    BLANK_FIELD_EXIST(409, "빈 칸이 있습니다."),
     PHONE_DUPLICATION_ERR(409, "휴대전화 번호가 중복되었습니다."),
     ALREADY_SUBMITTED(409, "이미 제출되어 수정이 불가합니다."),
 

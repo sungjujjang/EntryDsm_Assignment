@@ -5,6 +5,7 @@ import com.sungjujjang.entry.Auth.User;
 import com.sungjujjang.entry.Auth.UserRepository;
 import com.sungjujjang.entry.Global.Errors.exception.ALREADY_SUBMITTED;
 import com.sungjujjang.entry.Global.Errors.exception.APPLICATION_NOT_FOUND_ERR;
+import com.sungjujjang.entry.Global.Errors.exception.BLANK_FIELD_EXIST;
 import com.sungjujjang.entry.Global.Errors.exception.PHONE_DUPLICATION_ERR;
 import com.sungjujjang.entry.Global.Errors.exception.USER_NOT_FOUND_ERR;
 import lombok.RequiredArgsConstructor;
@@ -133,6 +134,10 @@ public class ApplicationService {
 
         if (isSubmittedApplication(application)) {
             throw ALREADY_SUBMITTED.EXCEPTION;
+        }
+
+        if (application.hasBlankField()) {
+            throw BLANK_FIELD_EXIST.EXCEPTION;
         }
 
         application.setSubmitedAt();

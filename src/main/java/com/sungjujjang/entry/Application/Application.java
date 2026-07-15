@@ -58,6 +58,15 @@ public class Application {
         this.propose = updateProposeRequest.propose();
     }
 
+    public boolean hasBlankField() {
+        return name == null
+                || birth == null
+                || gender == null
+                || region == null
+                || introduction == null
+                || propose == null;
+    }
+
     public void setSubmitedAt() {
         this.submitedAt = LocalDateTime.now();
     }
